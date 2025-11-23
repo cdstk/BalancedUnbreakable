@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "balancedunbreakable.mixin",
+  "refmap": "mixins.balancedunbreakable.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "mixins": [
+    "vanilla.Enchantment_Mixin",
+    "vanilla.EnchantmentHelper_Mixin",
+    "vanilla.EntityPlayer_Mixin",
+    "vanilla.Item_Mixin",
+    "vanilla.ItemStack_Mixin"
+  ],
+  "injectors": {
+    "maxShiftBy": 10
+  }
+}
