@@ -44,10 +44,10 @@ public class ForgeConfigHandler {
 
 		};
 
-		@Config.Comment("Enchantment ids in the format \"domain:itemname\" blacklisted from handling.\n" +
-				"These will be allowed to activate when an Item is broken.")
-		@Config.Name("Enchantments Blacklist")
-		public String[] enchantmentBlacklist = {
+		@Config.Comment("Enchantment ids in the format \"domain:itemname\"\n" +
+				"Whitelisted enchantments will be allowed to activate when an Item is broken.")
+		@Config.Name("Enchantments Whitelist")
+		public String[] enchantmentWhitelist = {
 				"minecraft:mending",
 				"somanyenchantments:advancedmending",
 				"somanyenchantments:rune_revival"

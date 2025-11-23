@@ -6,15 +6,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Item.class)
 public class Item_Mixin {
-
-    @Shadow private int maxDamage;
 
     @Inject(
             method = "onUsingTick",
@@ -25,6 +22,9 @@ public class Item_Mixin {
         if(!StackUtil.isUsable(stack)) player.resetActiveHand();
     }
 
+    /**
+     *  Check Vanilla Mending and Modded Mending enchantments
+     */
     @ModifyReturnValue(
             method = "onLeftClickEntity",
             at = @At("RETURN"),

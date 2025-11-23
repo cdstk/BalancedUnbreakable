@@ -17,7 +17,7 @@ public class ForgeConfigProvider {
 
     private static final Set<Class<?>> itemClassBlacklist = new HashSet<>();
     private static final Set<Item> itemInstBlacklist = new HashSet<>();
-    private static final Set<Enchantment> enchantmentsBlacklist = new HashSet<>();
+    private static final Set<Enchantment> enchantmentsWhitelist = new HashSet<>();
 
     public static void init(){
         getItemClassBlacklist();
@@ -62,15 +62,15 @@ public class ForgeConfigProvider {
         return ForgeConfigProvider.itemInstBlacklist;
     }
 
-    public static Set<Enchantment> getEquipmentEnchantmentBlacklist() {
-        if(ForgeConfigProvider.enchantmentsBlacklist.isEmpty()
-                && ForgeConfigHandler.server.enchantmentBlacklist.length > 0)
-            ForgeConfigProvider.enchantmentsBlacklist.addAll(Arrays
-                    .stream(ForgeConfigHandler.server.enchantmentBlacklist)
+    public static Set<Enchantment> getEquipmentEnchantmentWhitelist() {
+        if(ForgeConfigProvider.enchantmentsWhitelist.isEmpty()
+                && ForgeConfigHandler.server.enchantmentWhitelist.length > 0)
+            ForgeConfigProvider.enchantmentsWhitelist.addAll(Arrays
+                    .stream(ForgeConfigHandler.server.enchantmentWhitelist)
                     .map(ResourceLocation::new)
                     .map(ForgeRegistries.ENCHANTMENTS::getValue)
                     .collect(Collectors.toSet())
             );
-        return ForgeConfigProvider.enchantmentsBlacklist;
+        return ForgeConfigProvider.enchantmentsWhitelist;
     }
 }

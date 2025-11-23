@@ -34,7 +34,7 @@ public abstract class ItemStack_Mixin {
             method = "getDestroySpeed"
     )
     private float balancedUnbreakable_vanillaItemStack_getDestroySpeedUnusable(IBlockState blockState, Operation<Float> original){
-        return StackUtil.isUsable((ItemStack)(Object)this) ? original.call(blockState) : 1.0F;
+        return StackUtil.isUsable((ItemStack)(Object)this) ? original.call(blockState) : 0F;
     }
 
     @WrapMethod(

@@ -1,5 +1,9 @@
-FermiumTemplateMod
+Balanced Unbreakable
 
-A template mod for 1.12.2 using FermiumBooter for mixins, including some basic modding examples.
+A mod for 1.12.2 using FermiumBooter for mixins. Makes every item handle durability like an Elytra.
 
-Search and refactor any names using "ReplaceMe" or "Example" to fit your needs.
+Instead of completely breaking, items will remain on 0 durability with various penalties:
+* No Attributes (Armor, Damage, etc)
+* No Enchantments (Configurable exceptions, Mending is allowed)
+* Disabled Left Click
+* Disabled Right Click
