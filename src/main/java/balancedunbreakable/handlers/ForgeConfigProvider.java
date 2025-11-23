@@ -22,16 +22,18 @@ public class ForgeConfigProvider {
     public static void init(){
         getItemClassBlacklist();
         getItemInstBlacklist();
+        getEquipmentEnchantmentWhitelist();
     }
 
     public static void reset() {
         ForgeConfigProvider.itemClassBlacklist.clear();
         ForgeConfigProvider.itemInstBlacklist.clear();
+        ForgeConfigProvider.enchantmentsWhitelist.clear();
         init();
     }
 
     public static Set<Class<?>> getItemClassBlacklist(){
-        if(ForgeConfigProvider.itemClassBlacklist.isEmpty())
+        if(ForgeConfigProvider.itemClassBlacklist.isEmpty() && ForgeConfigHandler.server.itemClassBlacklist.length > 0)
             ForgeConfigProvider.itemClassBlacklist.addAll(Arrays
                     .stream(ForgeConfigHandler.server.itemClassBlacklist)
                     .map(line -> {
@@ -49,7 +51,7 @@ public class ForgeConfigProvider {
     }
 
     public static Set<Item> getItemInstBlacklist(){
-        if(ForgeConfigProvider.itemInstBlacklist.isEmpty())
+        if(ForgeConfigProvider.itemInstBlacklist.isEmpty() && ForgeConfigHandler.server.itemIDBlacklist.length > 0)
             ForgeConfigProvider.itemInstBlacklist.addAll(Arrays
                     .stream(ForgeConfigHandler.server.itemIDBlacklist)
                     .map(line -> {
@@ -63,12 +65,14 @@ public class ForgeConfigProvider {
     }
 
     public static Set<Enchantment> getEquipmentEnchantmentWhitelist() {
-        if(ForgeConfigProvider.enchantmentsWhitelist.isEmpty()
-                && ForgeConfigHandler.server.enchantmentWhitelist.length > 0)
+        if(ForgeConfigProvider.enchantmentsWhitelist.isEmpty() && ForgeConfigHandler.server.enchantmentWhitelist.length > 0)
             ForgeConfigProvider.enchantmentsWhitelist.addAll(Arrays
                     .stream(ForgeConfigHandler.server.enchantmentWhitelist)
-                    .map(ResourceLocation::new)
-                    .map(ForgeRegistries.ENCHANTMENTS::getValue)
+                    .map(line -> {
+                        Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(line));
+                        if(enchantment == null) BalancedUnbreakable.LOGGER.log(Level.WARN, "Enchantment ID not found for entry: {}, ignoring", line);
+                        return enchantment;
+                    })
                     .collect(Collectors.toSet())
             );
         return ForgeConfigProvider.enchantmentsWhitelist;
