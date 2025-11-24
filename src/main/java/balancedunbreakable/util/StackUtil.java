@@ -14,10 +14,8 @@ public abstract class StackUtil {
     public static boolean shouldCheckItem(Item item){
         if(!item.isDamageable()) return false;
 
-        if(ForgeConfigProvider.getItemInstBlacklist().contains(item)) return false;
-        for(Class<?> clazz : ForgeConfigProvider.getItemClassBlacklist()){
-            if(clazz.isInstance(item)) return false;
-        }
+        if(ForgeConfigProvider.isItemInstInBlacklist(item)) return false;
+        if(ForgeConfigProvider.isItemClassInBlacklist(item)) return false;
 
         return !shouldSkipCheck;
     }

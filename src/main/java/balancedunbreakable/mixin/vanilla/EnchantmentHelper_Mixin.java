@@ -23,7 +23,7 @@ public abstract class EnchantmentHelper_Mixin {
     private static boolean balancedUnbreakable_vanillaEnchantmentHelper_getEnchantmentLevelUnusable(boolean stackIsEmpty, Enchantment enchID, ItemStack stack){
         if(stackIsEmpty) return true;
 
-        if(ForgeConfigProvider.getEquipmentEnchantmentWhitelist().contains(enchID)) return false;
+        if(ForgeConfigProvider.isEnchantmentInWhitelist(enchID)) return false;
 
         return !StackUtil.isUsable(stack);
     }

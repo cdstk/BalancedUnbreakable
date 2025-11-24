@@ -1,6 +1,7 @@
 package balancedunbreakable.handlers;
 
 import balancedunbreakable.BalancedUnbreakable;
+import fermiumbooter.annotations.MixinConfig;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -14,9 +15,9 @@ public class ForgeConfigHandler {
 	@Config.Name("Server Options")
 	public static final ServerConfig server = new ServerConfig();
 
-//	@Config.Comment("Mixin Toggle Options")
-//	@Config.Name("Mixin Options")
-//	public static final MixinToggleConfig mixins = new MixinToggleConfig();
+	@Config.Comment("Mixin Toggle Options")
+	@Config.Name("Mixin Options")
+	public static final MixinToggleConfig mixins = new MixinToggleConfig();
 
 	public static class ServerConfig {
 
@@ -52,23 +53,36 @@ public class ForgeConfigHandler {
 				"somanyenchantments:advancedmending",
 				"somanyenchantments:rune_revival"
 		};
+
+		@Config.Comment("Potion ids in the format \"domain:potionname\"\n" +
+				"Whitelisted potions will able to recognize broken Items.")
+		@Config.Name("Potion Whitelist")
+		public String[] potionWhitelist = {
+				"potioncore:repair"
+		};
 	}
 
-//	@MixinConfig(name = BalancedUnbreakable.MODID) //Needed on config classes that contain MixinToggles for those mixins to be added
-//	public static class MixinToggleConfig {
-//
-//		@Config.Comment("Allows durability damage dealt by the Disenchanter to break items")
-//		@Config.Name("Disenchanter Compatibility (Disenchanter)")
-//		@Config.RequiresMcRestart
-//		@MixinConfig.MixinToggle(lateMixin = "mixins.balancedunbreakable.disenchanter.json", defaultValue = true)
-//		@MixinConfig.CompatHandling(
-//				modid = "disenchanter",
-//				desired = true,
-//				reason = "Mod needed for this Mixin to properly work",
-//				warnIngame = false //use this if the mixin is for an optional mod dependency that can be skipped with no issue if the mod is not present
-//		)
-//		public boolean enableDisenchanterMixin = true;
-//	}
+	@MixinConfig(name = BalancedUnbreakable.MODID) //Needed on config classes that contain MixinToggles for those mixins to be added
+	public static class MixinToggleConfig {
+
+		/**
+		 * For any known cases where player.inventory is directly checked instead of
+		 * 	EntityPlayer.getItemStackFromSlot
+		 * 	EntityPlayer.getArmorInventoryList
+		 */
+
+		@Config.Comment("Allows set bonus Equipment Conditions to recognize broken Items and disable Set Bonuses")
+		@Config.Name("Set Bonus Compatibility (Set Bonus)")
+		@Config.RequiresMcRestart
+		@MixinConfig.MixinToggle(lateMixin = "mixins.balancedunbreakable.setbonus.json", defaultValue = true)
+		@MixinConfig.CompatHandling(
+				modid = "setbonus",
+				desired = true,
+				reason = "Mod needed for this Mixin to properly work",
+				warnIngame = false //use this if the mixin is for an optional mod dependency that can be skipped with no issue if the mod is not present
+		)
+		public boolean enableSetBonusMixin = true;
+	}
 
 	@Mod.EventBusSubscriber(modid = BalancedUnbreakable.MODID)
 	private static class EventHandler{
@@ -77,7 +91,7 @@ public class ForgeConfigHandler {
 		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
 			if(event.getModID().equals(BalancedUnbreakable.MODID)) {
 				ConfigManager.sync(BalancedUnbreakable.MODID, Config.Type.INSTANCE);
-				ForgeConfigProvider.reset();
+				ForgeConfigProvider.init();
 			}
 		}
 	}

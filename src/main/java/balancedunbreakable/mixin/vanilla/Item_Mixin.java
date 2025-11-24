@@ -22,9 +22,6 @@ public class Item_Mixin {
         if(!StackUtil.isUsable(stack)) player.resetActiveHand();
     }
 
-    /**
-     *  Check Vanilla Mending and Modded Mending enchantments
-     */
     @ModifyReturnValue(
             method = "onLeftClickEntity",
             at = @At("RETURN"),

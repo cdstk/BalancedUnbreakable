@@ -1,7 +1,9 @@
 package balancedunbreakable;
 
+import balancedunbreakable.handlers.ForgeConfigProvider;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,4 +17,8 @@ public class BalancedUnbreakable {
 	@Instance(MODID)
 	public static BalancedUnbreakable instance;
 
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
+        ForgeConfigProvider.init();
+    }
 }
