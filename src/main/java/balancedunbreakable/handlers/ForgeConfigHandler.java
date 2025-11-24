@@ -36,7 +36,7 @@ public class ForgeConfigHandler {
 		@Config.Comment("Item classes blacklisted from handling")
 		@Config.Name("Item Class Blacklist")
 		public String[] itemClassBlacklist = new String[] {
-
+				"com.oblivioussp.spartanweaponry.item.ItemThrowingWeapon"
 		};
 
 		@Config.Comment("Item ids in the format \"domain:itemname\" blacklisted from handling")
