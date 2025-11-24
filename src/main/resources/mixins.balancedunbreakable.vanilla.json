@@ -8,8 +8,8 @@
   "mixins": [
     "vanilla.Enchantment_Mixin",
     "vanilla.EnchantmentHelper_Mixin",
+    "vanilla.EntityLivingBase_Mixin",
     "vanilla.EntityPlayer_Mixin",
-    "vanilla.Item_Mixin",
     "vanilla.ItemStack_Mixin",
     "vanilla.PotionEffect_Mixin"
   ],

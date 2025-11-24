@@ -33,9 +33,9 @@ public abstract class EnchantmentHelper_Mixin {
      */
     @ModifyExpressionValue(
             method = "applyEnchantmentModifier",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;getEnchantmentByID(I)Lnet/minecraft/enchantment/Enchantment;", ordinal = 0)
     )
-    private static boolean balancedUnbreakable_vanillaEnchantmentHelper_applyEnchantmentModifierUnusable(boolean stackIsEmpty, @Local(argsOnly = true) ItemStack stack){
-        return stackIsEmpty || !StackUtil.isUsable(stack);
+    private static Enchantment balancedUnbreakable_vanillaEnchantmentHelper_applyEnchantmentModifierWhitelistEnch(Enchantment enchID, @Local(argsOnly = true) ItemStack stack){
+        return ForgeConfigProvider.isEnchantmentInWhitelist(enchID) ? enchID : null;
     }
 }

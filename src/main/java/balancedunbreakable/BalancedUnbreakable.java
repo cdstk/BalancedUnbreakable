@@ -1,9 +1,16 @@
 package balancedunbreakable;
 
 import balancedunbreakable.handlers.ForgeConfigProvider;
+import balancedunbreakable.util.StackUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +25,28 @@ public class BalancedUnbreakable {
 	public static BalancedUnbreakable instance;
 
     @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(BalancedUnbreakable.class);
+    }
+
+    @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         ForgeConfigProvider.init();
+    }
+
+    @SubscribeEvent
+    public static void cancelBrokenItemAttack(AttackEntityEvent event){
+        if(event.isCanceled()) return;
+        EntityPlayer player = event.getEntityPlayer();
+        if(player.world.isRemote) return;
+
+        if(!player.getHeldItemMainhand().isEmpty() && !StackUtil.isUsable(player.getHeldItemMainhand())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void resetBrokeItemUseTick(LivingEntityUseItemEvent event){
+        if(event.getDuration() > 0 && !StackUtil.isUsable(event.getItem())) event.getEntityLiving().resetActiveHand();
     }
 }
