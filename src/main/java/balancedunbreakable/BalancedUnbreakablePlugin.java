@@ -13,6 +13,7 @@ public class BalancedUnbreakablePlugin implements IFMLLoadingPlugin {
 		MixinBootstrap.init();
 
 		FermiumRegistryAPI.enqueueMixin(false, "mixins.balancedunbreakable.vanilla.json");
+		FermiumRegistryAPI.enqueueMixin(false, "mixins.balancedunbreakable.spartanweaponryvanilla.json");
 	}
 
 	@Override

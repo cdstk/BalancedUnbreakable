@@ -59,6 +59,7 @@ dependencies {
     implementation fg.deobf("curse.maven:fermiumbooter-${fermiumbooter_version}")
 
     compileOnly fg.deobf("curse.maven:set-bonus-${setbonus_version}")
+    compileOnly fg.deobf("curse.maven:spartan-weaponry-278141:6839689")
 }
 
 mixin {
