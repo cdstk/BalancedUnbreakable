@@ -1,6 +1,7 @@
 package balancedunbreakable.handlers;
 
 import balancedunbreakable.BalancedUnbreakable;
+import balancedunbreakable.compat.ModLoadedUtil;
 import fermiumbooter.annotations.MixinConfig;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -11,6 +12,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Config(modid = BalancedUnbreakable.MODID)
 public class ForgeConfigHandler {
 
+	@Config.Comment("Client-Side Options")
+	@Config.Name("Client Options")
+	public static final ClientConfig client = new ClientConfig();
+
 	@Config.Comment("Server-Side Options")
 	@Config.Name("Server Options")
 	public static final ServerConfig server = new ServerConfig();
@@ -18,6 +23,14 @@ public class ForgeConfigHandler {
 	@Config.Comment("Mixin Toggle Options")
 	@Config.Name("Mixin Options")
 	public static final MixinToggleConfig mixins = new MixinToggleConfig();
+
+	public static class ClientConfig {
+
+		@Config.Comment("Adds a durability tooltip for the Hammer and Wirecutter")
+		@Config.Name("Immersive Engineering Durability Tooltip (Immersive Engineering)")
+		@Config.RequiresMcRestart
+		public boolean immersiveEngineeringTooltip = true;
+	}
 
 	public static class ServerConfig {
 
@@ -65,6 +78,18 @@ public class ForgeConfigHandler {
 	@MixinConfig(name = BalancedUnbreakable.MODID) //Needed on config classes that contain MixinToggles for those mixins to be added
 	public static class MixinToggleConfig {
 
+		@Config.Comment("Recognize and handle IE's custom durability items (Manual, Hammer, Voltmeter, and Wirecutter)")
+		@Config.Name("Immersive Engineering Compatibility (Immersive Engineering)")
+		@Config.RequiresMcRestart
+		@MixinConfig.MixinToggle(lateMixin = "mixins.balancedunbreakable.immersiveengineering.json", defaultValue = true)
+		@MixinConfig.CompatHandling(
+				modid = ModLoadedUtil.IMMERSIVE_ENGINEERING_MODID,
+				desired = true,
+				reason = "Mod needed for this Mixin to properly work",
+				warnIngame = false //use this if the mixin is for an optional mod dependency that can be skipped with no issue if the mod is not present
+		)
+		public boolean enableImmersiveEngineeringMixin = true;
+
 		/**
 		 * For any known cases where player.inventory is directly checked instead of
 		 * 	EntityPlayer.getItemStackFromSlot
@@ -76,7 +101,7 @@ public class ForgeConfigHandler {
 		@Config.RequiresMcRestart
 		@MixinConfig.MixinToggle(lateMixin = "mixins.balancedunbreakable.setbonus.json", defaultValue = true)
 		@MixinConfig.CompatHandling(
-				modid = "setbonus",
+				modid = ModLoadedUtil.SET_BONUS_MODID,
 				desired = true,
 				reason = "Mod needed for this Mixin to properly work",
 				warnIngame = false //use this if the mixin is for an optional mod dependency that can be skipped with no issue if the mod is not present

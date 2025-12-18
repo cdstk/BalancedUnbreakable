@@ -1,5 +1,7 @@
 package balancedunbreakable.util;
 
+import balancedunbreakable.compat.ImmersiveEngineeringUtil;
+import balancedunbreakable.compat.ModLoadedUtil;
 import balancedunbreakable.handlers.ForgeConfigProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +24,10 @@ public abstract class StackUtil {
 
     public static boolean isUsable(ItemStack stack){
         if(!shouldCheckItem(stack.getItem())) return true;
+
+        if(ModLoadedUtil.isImmersiveEngineeringLoaded() && ImmersiveEngineeringUtil.isDamageableTool(stack))
+            return ImmersiveEngineeringUtil.isToolUsable(stack);
+
         return stack.getItemDamage() < stack.getMaxDamage();
     }
 }
