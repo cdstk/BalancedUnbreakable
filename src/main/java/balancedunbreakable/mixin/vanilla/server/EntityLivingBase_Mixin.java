@@ -1,4 +1,4 @@
-package balancedunbreakable.mixin.vanilla;
+package balancedunbreakable.mixin.vanilla.server;
 
 import balancedunbreakable.util.StackUtil;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
@@ -23,7 +23,7 @@ public abstract class EntityLivingBase_Mixin extends Entity {
             method = "applyPotionDamageCalculations"
     )
     private float balancedUnbreakable_vanillaEntityLivingBase_applyPotionDamageCalculationsWhitelistEnch(DamageSource damageSource, float damage, Operation<Float> original){
-        if(!this.world.isRemote) StackUtil.shouldSkipCheck = true;
+        StackUtil.shouldSkipCheck = true;
         float calcDamage = original.call(damageSource, damage);
         StackUtil.shouldSkipCheck = false;
         return calcDamage;

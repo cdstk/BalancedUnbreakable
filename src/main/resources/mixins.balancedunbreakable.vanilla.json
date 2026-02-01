@@ -6,12 +6,9 @@
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "mixins": [
-    "vanilla.Enchantment_Mixin",
     "vanilla.EnchantmentHelper_Mixin",
-    "vanilla.EntityLivingBase_Mixin",
     "vanilla.EntityPlayer_Mixin",
-    "vanilla.ItemStack_Mixin",
-    "vanilla.PotionEffect_Mixin"
+    "vanilla.ItemStack_Mixin"
   ],
   "injectors": {
     "maxShiftBy": 10
@@ -19,5 +16,11 @@
   "client": [
     "vanilla.client.LayerArmorBase_Mixin",
     "vanilla.client.RenderItem_Mixin"
+  ],
+  "server": [
+    "vanilla.server.Enchantment_Mixin",
+    "vanilla.server.EntityLivingBase_Mixin",
+    "vanilla.server.EntityPlayer_Mixin",
+    "vanilla.server.PotionEffect_Mixin"
   ]
 }

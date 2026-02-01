@@ -1,4 +1,4 @@
-package balancedunbreakable.mixin.vanilla;
+package balancedunbreakable.mixin.vanilla.server;
 
 import balancedunbreakable.handlers.ForgeConfigProvider;
 import balancedunbreakable.util.StackUtil;
@@ -20,7 +20,7 @@ public abstract class PotionEffect_Mixin {
             method = "performEffect"
     )
     private void balancedUnbreakable_vanillaPotionEffect_performEffectWhitelistedPotion(EntityLivingBase entityIn, Operation<Void> original){
-        if(!entityIn.world.isRemote) StackUtil.shouldSkipCheck = ForgeConfigProvider.isPotionInWhitelist(this.potion);
+        StackUtil.shouldSkipCheck = ForgeConfigProvider.isPotionInWhitelist(this.potion);
         original.call(entityIn);
         StackUtil.shouldSkipCheck = false;
     }

@@ -3,14 +3,15 @@ package balancedunbreakable.mixin.vanilla;
 import balancedunbreakable.util.StackUtil;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,6 +22,9 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStack_Mixin {
@@ -44,15 +48,21 @@ public abstract class ItemStack_Mixin {
         return StackUtil.isUsable((ItemStack)(Object)this) ? original.call(world, player, hand) : new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
     }
 
-    @ModifyExpressionValue(
+    @WrapOperation(
             method = "damageItem",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;attemptDamageItem(ILjava/util/Random;Lnet/minecraft/entity/player/EntityPlayerMP;)Z")
     )
-    private boolean balancedUnbreakable_vanillaItemStack_damageItemCapped(boolean destroyItem, @Local(argsOnly = true) EntityLivingBase entityIn){
-        if(destroyItem && StackUtil.shouldCheckItem(this.getItem())) {
-            this.setItemDamage(Math.min(this.getItemDamage(), this.getMaxDamage()));
-            entityIn.renderBrokenItemStack((ItemStack)(Object)this);
-            return false;
+    private boolean balancedUnbreakable_vanillaItemStack_damageItemCapped(ItemStack instance, int amount, Random rand, @Nullable EntityPlayerMP damager, Operation<Boolean> original, @Local(argsOnly = true) EntityLivingBase entityIn){
+        boolean wasUsable = StackUtil.isUsable((ItemStack)(Object)this);
+        boolean destroyItem = original.call(instance, amount, rand, damager);
+        if(StackUtil.shouldCheckItem(this.getItem())){
+            if(wasUsable && !StackUtil.isUsable((ItemStack)(Object)this)){
+                entityIn.renderBrokenItemStack((ItemStack)(Object)this);
+            }
+            if(destroyItem) {
+                this.setItemDamage(Math.min(this.getItemDamage(), this.getMaxDamage()));
+                return false;
+            }
         }
         return destroyItem;
     }

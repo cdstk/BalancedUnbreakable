@@ -1,4 +1,4 @@
-package balancedunbreakable.mixin.vanilla;
+package balancedunbreakable.mixin.vanilla.server;
 
 import balancedunbreakable.handlers.ForgeConfigProvider;
 import balancedunbreakable.util.StackUtil;
@@ -21,7 +21,7 @@ public abstract class Enchantment_Mixin {
             method = "getEntityEquipment"
     )
     private List<ItemStack> balancedUnbreakable_vanillaEnchantmentHelper_getEntityEquipmentWhitelistedEnch(EntityLivingBase entityIn, Operation<List<ItemStack>> original){
-        if(!entityIn.world.isRemote) StackUtil.shouldSkipCheck = ForgeConfigProvider.isEnchantmentInWhitelist((Enchantment)(Object)this);
+        StackUtil.shouldSkipCheck = ForgeConfigProvider.isEnchantmentInWhitelist((Enchantment)(Object)this);
         List<ItemStack> equipment = original.call(entityIn);
         StackUtil.shouldSkipCheck = false;
         return equipment;
