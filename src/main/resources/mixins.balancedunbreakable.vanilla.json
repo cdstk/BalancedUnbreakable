@@ -15,5 +15,9 @@
   ],
   "injectors": {
     "maxShiftBy": 10
-  }
+  },
+  "client": [
+    "vanilla.client.LayerArmorBase_Mixin",
+    "vanilla.client.RenderItem_Mixin"
+  ]
 }

@@ -11,6 +11,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Config(modid = BalancedUnbreakable.MODID)
 public class ForgeConfigHandler {
 
+	@Config.Comment("Client-Side Options")
+	@Config.Name("Client Options")
+	public static final ClientConfig client = new ClientConfig();
+
 	@Config.Comment("Server-Side Options")
 	@Config.Name("Server Options")
 	public static final ServerConfig server = new ServerConfig();
@@ -18,6 +22,44 @@ public class ForgeConfigHandler {
 	@Config.Comment("Mixin Toggle Options")
 	@Config.Name("Mixin Options")
 	public static final MixinToggleConfig mixins = new MixinToggleConfig();
+
+	public static class ClientConfig {
+
+		@Config.Comment("Render a cracked texture overlay for broken items")
+		@Config.Name("Broken Item Overlay")
+		public boolean brokenOverlayRender = true;
+
+		@Config.Comment("Rendering properties for worn Armor.\n" +
+				"\tFormat: [EQUIPMENT SLOT, Scale, Rotation Angle, X, Y, Z]")
+		@Config.Name("Broken Armor Render Properties")
+		public String[] brokenArmorProperties = new String[] {
+				"CHEST, 128, -12, 0, 0, 1",
+				"LEGS, 96, 12, 32, 0, 1",
+				"FEET, 144, -20, 0, 0, 1",
+				"HEAD, 96, -10, 0, 0, 1"
+		};
+
+		@Config.Comment("Default variation of the cracked texture. Uses the vanilla block breaking texture.")
+		@Config.Name("Default Broken Item Overlay")
+		@Config.RangeInt(min = 0, max = 9)
+		public int overlayIndex = 4;
+
+		@Config.Comment("Specified variation of cracked texture for Item class.\n" +
+				"\tFormat: [\"Class instanceof, number\"]")
+		@Config.Name("Item Class Overlay Index")
+		public String[] itemClassOverlayIndex = new String[] {
+				"net.minecraft.item.ItemSword, 6",
+				"net.minecraft.item.ItemBow, 5",
+				"net.minecraft.item.ItemTool, 3"
+		};
+
+		@Config.Comment("Specified variation of cracked texture for Item ids.\n" +
+				"\tFormat: [\"domain:itemname, number\"]")
+		@Config.Name("Item ID Overlay Index")
+		public String[] itemIDOverlayIndexes = new String[] {
+
+		};
+	}
 
 	public static class ServerConfig {
 
