@@ -36,6 +36,9 @@ public abstract class EnchantmentHelper_Mixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;getEnchantmentByID(I)Lnet/minecraft/enchantment/Enchantment;", ordinal = 0)
     )
     private static Enchantment balancedUnbreakable_vanillaEnchantmentHelper_applyEnchantmentModifierWhitelistEnch(Enchantment enchID, @Local(argsOnly = true) ItemStack stack){
-        return ForgeConfigProvider.isEnchantmentInWhitelist(enchID) ? enchID : null;
+        if(!StackUtil.isUsable(stack) && !ForgeConfigProvider.isEnchantmentInWhitelist(enchID)){
+            return null;
+        }
+        return enchID;
     }
 }
