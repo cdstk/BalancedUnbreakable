@@ -1,5 +1,8 @@
 package balancedunbreakable;
 
+import balancedunbreakable.compat.ImmersiveEngineeringClientHandler;
+import balancedunbreakable.compat.ModLoadedUtil;
+import balancedunbreakable.handlers.ForgeConfigHandler;
 import balancedunbreakable.handlers.ForgeConfigProvider;
 import balancedunbreakable.util.StackUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +12,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +36,15 @@ public class BalancedUnbreakable {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         ForgeConfigProvider.init();
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event){
+        if(event.getSide().isClient()) {
+            if (ModLoadedUtil.isImmersiveEngineeringLoaded() && ForgeConfigHandler.client.immersiveEngineeringTooltip) {
+                MinecraftForge.EVENT_BUS.register(ImmersiveEngineeringClientHandler.class);
+            }
+        }
     }
 
     @SubscribeEvent

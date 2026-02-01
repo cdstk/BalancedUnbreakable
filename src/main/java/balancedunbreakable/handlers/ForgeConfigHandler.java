@@ -1,6 +1,7 @@
 package balancedunbreakable.handlers;
 
 import balancedunbreakable.BalancedUnbreakable;
+import balancedunbreakable.compat.ModLoadedUtil;
 import fermiumbooter.annotations.MixinConfig;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -24,6 +25,11 @@ public class ForgeConfigHandler {
 	public static final MixinToggleConfig mixins = new MixinToggleConfig();
 
 	public static class ClientConfig {
+
+        @Config.Comment("Adds a durability tooltip for the Hammer and Wirecutter")
+        @Config.Name("Immersive Engineering Durability Tooltip (Immersive Engineering)")
+        @Config.RequiresMcRestart
+        public boolean immersiveEngineeringTooltip = true;
 
 		@Config.Comment("Render a cracked texture overlay for broken items")
 		@Config.Name("Broken Item Overlay")
@@ -107,6 +113,18 @@ public class ForgeConfigHandler {
 	@MixinConfig(name = BalancedUnbreakable.MODID) //Needed on config classes that contain MixinToggles for those mixins to be added
 	public static class MixinToggleConfig {
 
+		@Config.Comment("Recognize and handle IE's custom durability items (Manual, Hammer, Voltmeter, and Wirecutter)")
+		@Config.Name("Immersive Engineering Compatibility (Immersive Engineering)")
+		@Config.RequiresMcRestart
+		@MixinConfig.MixinToggle(lateMixin = "mixins.balancedunbreakable.immersiveengineering.json", defaultValue = true)
+		@MixinConfig.CompatHandling(
+				modid = ModLoadedUtil.IMMERSIVE_ENGINEERING_MODID,
+				desired = true,
+				reason = "Mod needed for this Mixin to properly work",
+				warnIngame = false //use this if the mixin is for an optional mod dependency that can be skipped with no issue if the mod is not present
+		)
+		public boolean enableImmersiveEngineeringMixin = true;
+
 		/**
 		 * For any known cases where player.inventory is directly checked instead of
 		 * 	EntityPlayer.getItemStackFromSlot
@@ -118,7 +136,7 @@ public class ForgeConfigHandler {
 		@Config.RequiresMcRestart
 		@MixinConfig.MixinToggle(lateMixin = "mixins.balancedunbreakable.setbonus.json", defaultValue = true)
 		@MixinConfig.CompatHandling(
-				modid = "setbonus",
+				modid = ModLoadedUtil.SET_BONUS_MODID,
 				desired = true,
 				reason = "Mod needed for this Mixin to properly work",
 				warnIngame = false //use this if the mixin is for an optional mod dependency that can be skipped with no issue if the mod is not present
