@@ -20,20 +20,24 @@ public class ForgeConfigHandler {
 	@Config.Name("Server Options")
 	public static final ServerConfig server = new ServerConfig();
 
+	@Config.Comment("Mod Integration Options")
+	@Config.Name("Mod Integration Options")
+	public static final IntegrationConfig integration = new IntegrationConfig();
+
 	@Config.Comment("Mixin Toggle Options")
 	@Config.Name("Mixin Options")
 	public static final MixinToggleConfig mixins = new MixinToggleConfig();
 
 	public static class ClientConfig {
 
-        @Config.Comment("Adds a durability tooltip for the Hammer and Wirecutter")
-        @Config.Name("Immersive Engineering Durability Tooltip (Immersive Engineering)")
-        @Config.RequiresMcRestart
-        public boolean immersiveEngineeringTooltip = true;
-
 		@Config.Comment("Render a cracked texture overlay for broken items")
 		@Config.Name("Broken Item Overlay")
 		public boolean brokenOverlayRender = true;
+
+		@Config.Comment("Default variation of the cracked texture. Uses the vanilla block breaking texture.")
+		@Config.Name("Default Broken Item Overlay")
+		@Config.RangeInt(min = 0, max = 9)
+		public int overlayIndex = 4;
 
 		@Config.Comment("Rendering properties for worn Armor.\n" +
 				"\tFormat: [EQUIPMENT SLOT, Scale, Rotation Angle, X, Y, Z]")
@@ -44,11 +48,6 @@ public class ForgeConfigHandler {
 				"FEET, 144, -20, 0, 0, 1",
 				"HEAD, 96, -10, 0, 0, 1"
 		};
-
-		@Config.Comment("Default variation of the cracked texture. Uses the vanilla block breaking texture.")
-		@Config.Name("Default Broken Item Overlay")
-		@Config.RangeInt(min = 0, max = 9)
-		public int overlayIndex = 4;
 
 		@Config.Comment("Specified variation of cracked texture for Item class.\n" +
 				"\tFormat: [\"Class instanceof, number\"]")
@@ -73,7 +72,7 @@ public class ForgeConfigHandler {
 				"Broken items will be assumed to be air.\n" +
 				"Will break specific hand checks from things such as commands.")
 		@Config.Name("Aggressive Held Item Nullification")
-		public boolean airHeldItem = false;
+		public boolean airHeldItem = true;
 
 		@Config.Comment("Apply a very aggressive nullification to Armor when broken.\n" +
 				"Broken items will be assumed to be air.\n" +
@@ -108,6 +107,14 @@ public class ForgeConfigHandler {
 		public String[] potionWhitelist = {
 				"potioncore:repair"
 		};
+	}
+
+	public static class IntegrationConfig {
+
+		@Config.Comment("Adds a durability tooltip for the Hammer and Wirecutter")
+		@Config.Name("Immersive Engineering Durability Tooltip (Immersive Engineering)")
+		@Config.RequiresMcRestart
+		public boolean immersiveEngineeringTooltip = true;
 	}
 
 	@MixinConfig(name = BalancedUnbreakable.MODID) //Needed on config classes that contain MixinToggles for those mixins to be added

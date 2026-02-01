@@ -7,7 +7,6 @@
   "minVersion": "0.8",
   "mixins": [
     "vanilla.EnchantmentHelper_Mixin",
-    "vanilla.EntityPlayer_Mixin",
     "vanilla.ItemStack_Mixin"
   ],
   "injectors": {

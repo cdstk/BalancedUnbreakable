@@ -41,7 +41,7 @@ public class BalancedUnbreakable {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event){
         if(event.getSide().isClient()) {
-            if (ModLoadedUtil.isImmersiveEngineeringLoaded() && ForgeConfigHandler.client.immersiveEngineeringTooltip) {
+            if (ModLoadedUtil.isImmersiveEngineeringLoaded() && ForgeConfigHandler.integration.immersiveEngineeringTooltip) {
                 MinecraftForge.EVENT_BUS.register(ImmersiveEngineeringClientHandler.class);
             }
         }

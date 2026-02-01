@@ -17,7 +17,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -39,6 +41,14 @@ public abstract class ItemStack_Mixin {
     )
     private float balancedUnbreakable_vanillaItemStack_getDestroySpeedUnusable(IBlockState blockState, Operation<Float> original){
         return StackUtil.isUsable((ItemStack)(Object)this) ? original.call(blockState) : 0F;
+    }
+
+    @WrapMethod(
+            method = "onItemUse"
+    )
+    private EnumActionResult balancedUnbreakable_vanillaItemStack_onItemUseUnusable(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, Operation<EnumActionResult> original){
+        if(!StackUtil.isUsable((ItemStack)(Object)this)) return EnumActionResult.FAIL;
+        return original.call(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 
     @WrapMethod(
